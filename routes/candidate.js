@@ -152,7 +152,7 @@ catch(err){
         count:data.voteCount
        }
     })
-    res.status(200).json(voteRecord)
+    res.status(200).json({response:voteRecord, msg:"Data"})
 }
      catch(err){
     console.log(err);
