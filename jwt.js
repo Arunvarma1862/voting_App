@@ -9,7 +9,7 @@ const jwtAuthMiddleware=(req,res,next)=>{
 
     const token = req.headers.authorization.split(' ')[1];
     console.log("Tok",token)
-    if(!token)  return res.status(401).json({msg:"unauthrozied"});
+    if(!token)  return res.status(401).json({msg:"un-authrozied"});
 
     try{
         const decoded= jwt.verify(token,process.env.JWT_SECRET);

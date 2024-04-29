@@ -78,7 +78,7 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
      const response= await candidate.findByIdAndDelete(candidateId);
  
      if(!response){
-         return res.status(404).json({msg:"candidate deleted "})
+         return res.status(404).json({msg:"candidate not found "})
      }
       console.log("candidate updated ");
       res.status(200).json({msg:"deleted"})
@@ -98,9 +98,9 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
     // no admin can vote
     // user can only vote once
     
-  const  CandidateID = req.params.candidateId;
+    const  CandidateID = req.params.candidateId;
     console.log(CandidateID)
-   const userId = req.user.id;
+    const userId = req.user.id;
 
     try{
          // Find the Candidate document with the specified candidateID
@@ -116,7 +116,7 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
         return res.status(403).json({ message: 'admin is not allowed to vote'});
     }
     if(user.isVoted){
-        return res.status(400).json({ message: 'You have already voted' });  
+        return res.status(200).json({ message: 'You have already voted' });  
     }
         // Update the Candidate document to record the vote
     Candidate.votes.push({user:userId});
@@ -128,10 +128,8 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
      await user.save();
      return res.status(200).json({ message: 'Vote recorded successfully' });
 
-
 }
 catch(err){
-
     console.log(err);
     return res.status(500).json({error: 'Internal Server Error'});
 }
@@ -143,9 +141,10 @@ catch(err){
 
   router.get('/vote/count',async (req,res)=>{
     try{
- // Find all candidates and sort them by voteCount in descending order
+        // Find all candidates and sort them by voteCount in descending order
     const Candidate= await candidate.find().sort({voteCount:'desc'});
-      // Map the candidates to only return their name and voteCount
+
+        // Map the candidates to only return their name and voteCount
       const voteRecord= Candidate.map((data)=>{
        return {
         partyName:data.party,
@@ -163,11 +162,11 @@ catch(err){
 
 router.get('/',async (req,res)=>{
     try{
-         // Find all candidates and select only the name and party fields, excluding _id
+          // Find all candidates and select only the name and party fields, excluding _id
+           const Candidate= await candidate.find({},'name party _id');
 
-         const Candidate= await candidate.find({},'name party _id');
           // Return the list of candidates
-          res.status(200).json(Candidate)
+           res.status(200).json(Candidate)
 
     }
     catch(err){
@@ -176,5 +175,17 @@ router.get('/',async (req,res)=>{
     }
 })
 
+
+router.get('/partylist',async (req,res)=>{
+    try{
+        const Candidate= await candidate.find({},'party');
+        res.status(200).json({party:Candidate,partyList:Candidate.length})
+    }
+    catch(err){
+        console.log(err);
+        res.status(500).json({error:"internal server error"})
+    }
+    
+})
  module.exports=router
  

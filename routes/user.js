@@ -6,29 +6,29 @@ const router= express.Router()
 
  router.post('/signup',async(req,res)=>{
       try{
-           const data = req.body;  // Assuming the request body contains the User data
-
-          // Check if there is already an admin user
+           const data = req.body;                   // Assuming the request body contains the User data
+          
+                // Check if there is already an admin user
      const adminUser = await user.findOne({ role: 'admin' });
      if (data.role === 'admin' && adminUser) {
          return res.status(400).json({ error: 'Admin user already exists' });
      }
 
-     // Validate Aadhar Card Number must have exactly 12 digits
+                  // Validate Aadhar Card Number must have exactly 12 digits
        if (!/^\d{12}$/.test(data.aadharCardNumber)) {
                return res.status(400).json({ error: 'Aadhar Card Number must be exactly 12 digits' });
        }
 
-         // Check if a user with the same Aadhar Card Number already exists
+                   // Check if a user with the same Aadhar Card Number already exists
          const existingUser = await user.findOne({ aadharCardNumber: data.aadharCardNumber });
          if (existingUser) {
              return res.status(400).json({ error: 'User with the same Aadhar Card Number already exists' });
          }
  
-          // Create a new User document using the Mongoose model
+                   // Create a new User document using the Mongoose model
         const newUser= new user(data);
 
-     // Save the new user to the database
+                   // Save the new user to the database
       const response=await newUser.save();
       console.log('data saved successfully',response);
       const payload={
@@ -50,20 +50,20 @@ const router= express.Router()
 
  router.post('/login',async (req,res)=>{
    try{
-       // Extract aadharCardNumber and password from request body
+         // Extract aadharCardNumber and password from request body
    const{aadharCardNumber,password}= req.body;
    console.log("md",aadharCardNumber, password)
 
-    // Check if aadharCardNumber or password is missing
+         // Check if aadharCardNumber or password is missing
     if (!aadharCardNumber || !password) {
       return res.status(400).json({ error: 'Aadhar Card Number and password are required' });
       }
-   // Find the user by aadharCardNumber
+          // Find the user by aadharCardNumber
    const User= await user.findOne({aadharCardNumber:aadharCardNumber});
    console.log(User);
-   // If user does not exist or password does not match, return error
+          // If user does not exist or password does not match, return error
    if(!User || !(await User.comparePassword(password))){
-      return res.status(401).json({error:'invalid username and password'})
+      return res.status(401).json({error:'invalid username and password'});
    }
 
    const payload={

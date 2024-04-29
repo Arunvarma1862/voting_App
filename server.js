@@ -7,8 +7,6 @@ const PORT = process.env.PORT || 3000;
 
 const app= express()
 
-
-
 // middleware
 
 app.use(bodyParser.json())
@@ -23,8 +21,6 @@ app.use('/user',userRoute)
 app.use('/candidate',candidateRoute)
 
 
-
 //server
-
 
 app.listen(PORT,()=>{console.log(`server started at port ${PORT}`)})
