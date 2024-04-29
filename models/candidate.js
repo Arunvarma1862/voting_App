@@ -37,6 +37,6 @@ voteCount:{
 },{timestamps:true})
 
 
-const Candidate = mongoose.model('Candidate',candidateSchema);
+const Candidate = mongoose.model('candidate',candidateSchema);
 
 module.exports=Candidate
