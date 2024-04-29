@@ -1,7 +1,10 @@
 const jwt= require('jsonwebtoken');
 require('dotenv').config();
+const secret='12345'
 
 const jwtAuthMiddleware=(req,res,next)=>{
+   
+
 
     const Token= req.headers.authorization;
     console.log("To",Token)
@@ -12,7 +15,7 @@ const jwtAuthMiddleware=(req,res,next)=>{
     if(!token)  return res.status(401).json({msg:"un-authrozied"});
 
     try{
-        const decoded= jwt.verify(token,process.env.JWT_SECRET);
+        const decoded= jwt.verify(token,secret);
         console.log("dec",decoded)
         req.user= decoded;
         next()
@@ -25,7 +28,8 @@ const jwtAuthMiddleware=(req,res,next)=>{
     }
 }
 
-const secret='12345'
+
+
 const generateToken= (userData)=>{
     return jwt.sign(userData,secret,{expiresIn:30000})
 }
