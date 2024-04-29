@@ -1,8 +1,8 @@
 const  mongoose= require('mongoose');
 require('dotenv').config();
 
-const mongoURL= process.env.mongoDB_url_local 
-// const mongoURL= process.env.mongoDB_url_online
+// const mongoURL= process.env.mongoDB_url_local 
+const mongoURL= process.env.mongoDB_url_online
 
 mongoose.connect(mongoURL)
 
