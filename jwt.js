@@ -24,8 +24,10 @@ const jwtAuthMiddleware=(req,res,next)=>{
 
     }
 }
+
+const secret='12345'
 const generateToken= (userData)=>{
-    return jwt.sign(userData,process.env.JWT_SECRET,{expiresIn:30000})
+    return jwt.sign(userData,secret,{expiresIn:30000})
 }
 
 module.exports={
