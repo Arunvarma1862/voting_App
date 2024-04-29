@@ -179,6 +179,7 @@ router.get('/',async (req,res)=>{
 router.get('/partylist',async (req,res)=>{
     try{
         const Candidate= await candidate.find({},'party');
+        console.log("Candidate",Candidate)
         res.status(200).json({party:Candidate,partyList:Candidate.length})
     }
     catch(err){
