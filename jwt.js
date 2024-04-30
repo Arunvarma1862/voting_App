@@ -15,6 +15,7 @@ const jwtAuthMiddleware=(req,res,next)=>{
     if(!token)  return res.status(401).json({msg:"un-authrozied"});
 
     try{
+        // process.env.JWT_SECRET
         const decoded= jwt.verify(token,secret);
         console.log("dec",decoded)
         req.user= decoded;
