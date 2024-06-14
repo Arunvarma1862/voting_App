@@ -4,11 +4,13 @@ const{jwtAuthMiddleware,generateToken}= require('../jwt')
 const router= express.Router()
 
 
+
+// create account
  router.post('/signup',async(req,res)=>{
       try{
-           const data = req.body;                   // Assuming the request body contains the User data
-          
-                // Check if there is already an admin user
+           const data = req.body;        // Assuming the request body contains the User data
+           
+           // Check if there is already an admin user
      const adminUser = await user.findOne({ role: 'admin' });
      if (data.role === 'admin' && adminUser) {
          return res.status(400).json({ error: 'Admin user already exists' });
@@ -88,7 +90,7 @@ catch(err){
    // const userData= req.user;
    // console.log('UserData:',userData);
    // const userID= userData.id;
-   
+  
    const User= await user.findById(req.user.id);
    res.status(200).json({User})
    }
@@ -97,6 +99,8 @@ catch(err){
       res.status(500).json({msg:"internal server error"})
    }
  })
+
+ // update password
 
  router.put('/profile/password/',jwtAuthMiddleware,async (req,res)=>{
    try{

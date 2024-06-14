@@ -9,14 +9,15 @@ const app= express()
 
 // middleware
 
-app.use(bodyParser.json())
+app.use(bodyParser.json()) // req.body
 app.use(express.urlencoded({extended:false}));
 
 // Routes
-
+// Import the router files
 const userRoute= require('./routes/user');
 const candidateRoute= require('./routes/candidate');
 
+// Use the routers
 app.use('/user',userRoute)
 app.use('/candidate',candidateRoute)
 

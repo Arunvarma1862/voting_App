@@ -15,17 +15,18 @@ const checkAdmin=async (userId)=>{
         return false;
    }
 }
-
-
+// POST route to add a candidate
 router.post('/',jwtAuthMiddleware,async(req,res)=>{
     try{
         if(!(await checkAdmin(req.user.id)))
         {
-            return res.status(403).json({msg:"user is not admin"})
+            return res.status(403).json({msg:"user does not have admin role"})
         }
         
-     const data = req.body;
+     const data = req.body;  // Assuming the request body contains the candidate data
+      // Create a new User document using the Mongoose model
      const newCandidate= new candidate(data);
+     // Save the new user to the database
      const response=await newCandidate.save();
      console.log('data saved successfully',response);
      res.status(200).json({msg:"candidateAdded",response})
@@ -36,17 +37,17 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
     }   
   })
  
-
+// PUT to update the candidate
 
  router.put('/:candidateId',jwtAuthMiddleware,async (req,res)=>{
    try{
     
     if(!(await checkAdmin(req.user.id))){
-        return res.status(403).json({msg:"user is not admin"})
+        return res.status(403).json({msg:"user does not have admin role"})
     }
      
-    const candidateId= req.params.candidateId;
-    const updatedCandidate=req.body;
+    const candidateId= req.params.candidateId; // Extract the id from the URL parameter
+    const updatedCandidate=req.body;  // Updated data for the person
 
     const response= await candidate.findByIdAndUpdate(candidateId,updatedCandidate,{
         new:true
@@ -67,14 +68,16 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
    }
  })
 
+ // delete the candidate
+
  router.delete('/:candidateId',jwtAuthMiddleware,async (req,res)=>{
     try{
  
      if(!checkAdmin(req.user.id)){
-         return res.status(403).json({msg:"user is not admin"})
+         return res.status(403).json({msg:"user does not have admin role"})
      }
       
-     const candidateId= req.params.candidateId;
+     const candidateId= req.params.candidateId;  // Extract the id from the URL parameter
      const response= await candidate.findByIdAndDelete(candidateId);
  
      if(!response){
@@ -99,7 +102,6 @@ router.post('/',jwtAuthMiddleware,async(req,res)=>{
     // user can only vote once
     
     const  CandidateID = req.params.candidateId;
-    console.log(CandidateID)
     const userId = req.user.id;
 
     try{
